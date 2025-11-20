@@ -1,1 +1,1 @@
-# inventory_frontend
+# inventory_app
