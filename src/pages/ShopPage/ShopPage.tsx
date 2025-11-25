@@ -36,20 +36,20 @@ export default function ShopPage() {
     }, []);
 
 
-    async function buy(id: number) {
-        if (!user) return;
+    // async function buy(id: number) {
+    //     if (!user) return;
 
-        await fetch(`${BASE_URL}/api/inventory/${id}/decrease`, {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount: 1 }),
-        });
+    //     await fetch(`${BASE_URL}/api/inventory/${id}/decrease`, {
+    //         method: "POST",
+    //         credentials: "include",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify({ amount: 1 }),
+    //     });
 
-        // refresh
-        const res = await fetch(`${BASE_URL}/api/inventory`);
-        setProducts(await res.json());
-    }
+    //     // refresh
+    //     const res = await fetch(`${BASE_URL}/api/inventory`);
+    //     setProducts(await res.json());
+    // }
 
     async function buyCart() {
         for (const item of cart) {
@@ -66,9 +66,7 @@ export default function ShopPage() {
     }
 
 
-    function addProduct() {
-        console.log("Admin adding product...");
-    }
+
 
     const pageWrapperStyle: React.CSSProperties = {
         display: "flex",
@@ -83,19 +81,6 @@ export default function ShopPage() {
         padding: "20px",
         paddingRight: "40px",
     };
-
-    const cartSidebarStyle: React.CSSProperties = {
-        width: "300px",
-        background: "#ffffff",
-        borderLeft: "1px solid #d0d7de",
-        padding: "20px",
-        position: "sticky",
-        top: "20px",
-        height: "fit-content",
-        borderRadius: "8px",
-        boxShadow: "0 0 10px rgba(0,0,0,0.05)"
-    };
-
 
 
     return (
