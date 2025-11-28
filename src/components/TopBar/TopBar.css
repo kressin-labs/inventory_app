@@ -1,11 +1,31 @@
 .topbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
   align-items: center;
   background: #222;
   padding: 10px 20px;
   color: white;
 }
+
+.title {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.main-link {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.main-link:hover {
+  text-decoration: underline;
+}
+
+.right {
+    min-width: fit-content;
+}
+
 
 .username {
   margin-right: 20px;
