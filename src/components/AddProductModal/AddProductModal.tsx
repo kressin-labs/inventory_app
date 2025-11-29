@@ -1,4 +1,5 @@
 import { useState } from "react";
+import './AddProductModal.css'
 
 type AddProductModalProps = {
   onClose: () => void;
@@ -18,8 +19,8 @@ export default function AddProductModal({ onClose, onSaved }: AddProductModalPro
       body: JSON.stringify({ name, quantity }),
     });
 
-    onSaved();    // refresh product list in ShopPage
-    onClose();    // close modal
+    onSaved(); 
+    onClose(); 
   }
 
   return (

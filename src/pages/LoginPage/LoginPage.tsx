@@ -1,42 +1,75 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { login, getCurrentUser } from "../../api/authApi";
 import { useAuth } from "../../context/AuthContext";
+import './LoginPage.css'
 
-export default function LoginPage() {
-  const { setUser } = useAuth();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+interface LoginPageProps {
+    onLoginSuccess?: () => void;
+}
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    try {
-      await login(username, password);
+export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
+    const { setUser } = useAuth();
 
-      const me = await getCurrentUser();
-      if (!me) {
-        setError("Could not load user info");
-        return;
-      }
 
-      setUser({
-        username: me.username,
-        role: me.role as "ADMIN" | "USER",
-      });
+    const [username, setUsername] = useState("user");
+    const [password, setPassword] = useState("user123");
 
-      setError("");
-    } catch {
-      setError("Login failed");
+    const [error, setError] = useState("");
+
+    async function submit(e: React.FormEvent) {
+        e.preventDefault();
+        setError("");
+
+        try {
+            await login(username, password);
+
+            const me = await getCurrentUser();
+            if (!me) {
+                setError("Login succeeded, but could not load user info.");
+                return;
+            }
+
+            setUser({
+                username: me.username,
+                role: me.role as "ADMIN" | "USER",
+            });
+
+            if (onLoginSuccess) {
+                onLoginSuccess();
+            }
+
+        } catch (err) {
+            console.error("Login attempt failed:", err);
+            setError("Login failed. Check your credentials.");
+        }
     }
-  }
 
-  return (
-    <form onSubmit={submit}>
-      <h2>Login</h2>
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      <input value={username} onChange={e => setUsername(e.target.value)} />
-      <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-      <button type="submit">Login</button>
-    </form>
-  );
+    return (
+        <form onSubmit={submit} className="login-form">
+            <h2 className="login-title">Login</h2>
+
+            {error && <div className="login-error-message">{error}</div>}
+
+            <label htmlFor="username">Username</label>
+            <input
+                id="username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                autoComplete="username"
+                required
+            />
+
+            <label htmlFor="password">Password</label>
+            <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+            />
+
+            <button type="submit" className="login-submit-btn">Login</button>
+        </form>
+    );
 }

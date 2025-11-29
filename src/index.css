@@ -67,6 +67,11 @@ input, select {
   font-size: 14px;
 }
 
+.cart-modal-content {
+    background-color: white; 
+    color: #1a1a1a; 
+    padding: 20px;
+}
 
 
 @media (prefers-color-scheme: light) {

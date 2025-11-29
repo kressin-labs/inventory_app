@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 type CartItem = {
   id: number;
   name: string;
-  quantity: number; // quantity the user wants (1–5)
+  quantity: number;
 };
 
 type CartContextType = {
@@ -22,7 +22,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCart(prev => {
       const existing = prev.find(p => p.id === item.id);
       if (existing) {
-        // max 5 units
         return prev.map(p =>
           p.id === item.id
             ? { ...p, quantity: Math.min(p.quantity + item.quantity, 5) }

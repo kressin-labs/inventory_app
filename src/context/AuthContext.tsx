@@ -17,7 +17,6 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
 
-  // Load user on page load
   useEffect(() => {
     (async () => {
       const me = await getCurrentUser();

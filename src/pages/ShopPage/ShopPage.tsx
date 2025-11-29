@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import { useCart } from "../../context/CartContext";
-import { CartModal } from "../../components/CartModal/CartModal";
+import ProductCard from '../../components/ProductCard/ProductCard';
+
+import './ShopPage.css'
 
 type Product = {
     id: number;
@@ -15,293 +17,32 @@ export default function ShopPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [selectedAmount, setSelectedAmount] = useState<Record<number, number>>({});
-    const { addToCart } = useCart();
-    const { cart, removeFromCart, clearCart } = useCart();
     const [adminAmount, setAdminAmount] = useState<Record<number, number>>({});
-    const [cartOpen, setCartOpen] = useState(false);
+
+    const [feedback, setFeedback] = useState<{ message: string, type: 'success' | 'warning' } | null>(null);
+    const [cardFlash, setCardFlash] = useState<Record<number, 'success' | 'warning' | null>>({});
+
+
+    const { addToCart, cart, clearCart } = useCart();
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+    // --- Feedback Logic ---
+    const showFeedback = (message: string, type: 'success' | 'warning' = 'success') => {
+        setFeedback({ message, type });
+        setTimeout(() => setFeedback(null), 3000);
+    };
+
+    // Function to clear the individual card flash after 500ms
+    const clearCardFlash = (id: number) => {
+        setTimeout(() => {
+            setCardFlash(prev => ({ ...prev, [id]: null }));
+        }, 500);
+    };
+
+    // --- Data Fetching ---
     useEffect(() => {
-        (async () => {
-            const res = await fetch(`${BASE_URL}/api/inventory`);
-            const data = await res.json();
-
-            // Sort alphabetically
-            data.sort((a: Product, b: Product) =>
-                a.name.localeCompare(b.name)
-            );
-
-            setProducts(data);
-        })();
+        refreshProducts();
     }, []);
-
-
-    // async function buy(id: number) {
-    //     if (!user) return;
-
-    //     await fetch(`${BASE_URL}/api/inventory/${id}/decrease`, {
-    //         method: "POST",
-    //         credentials: "include",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ amount: 1 }),
-    //     });
-
-    //     // refresh
-    //     const res = await fetch(`${BASE_URL}/api/inventory`);
-    //     setProducts(await res.json());
-    // }
-
-    async function buyCart() {
-        for (const item of cart) {
-            await fetch(`${BASE_URL}/api/inventory/${item.id}/decrease`, {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: item.quantity }),
-            });
-        }
-
-        clearCart();
-        refreshProducts();
-    }
-
-
-
-
-    const pageWrapperStyle: React.CSSProperties = {
-        display: "flex",
-        flexDirection: "row",
-        width: "100vw",          // full viewport width
-        maxWidth: "100%",         // prevent shrinking
-        alignItems: "flex-start",
-    };
-
-    const productListStyle: React.CSSProperties = {
-        flexGrow: 1,
-        padding: "20px",
-        paddingRight: "40px",
-    };
-
-
-    return (
-        <div style={pageWrapperStyle}>
-            {/* LEFT: Products (full width minus sidebar) */}
-            <div style={productListStyle}>
-                <h2>Shop</h2>
-                {/* ADMIN ONLY BUTTON */}
-                {user?.role === "ADMIN" && (
-                    <button
-                        style={{
-                            background: "#0d6efd",
-                            color: "white",
-                            padding: "10px 16px",
-                            borderRadius: 6,
-                            marginBottom: 20
-                        }}
-                        onClick={() => setShowAddModal(true)}
-                    >
-                        + Add Product
-                    </button>
-
-                )}
-                {renderProducts()}
-            </div>
-
-            {showAddModal && (
-                <AddProductModal
-                    onClose={() => setShowAddModal(false)}
-                    onSaved={refreshProducts}
-                />
-            )}
-
-            <CartModal open={cartOpen} onClose={() => setCartOpen(false)}>
-                {renderCart()}
-            </CartModal>
-
-            <button
-                onClick={() => setCartOpen(true)}
-                style={{
-                    position: "fixed",
-                    top: "60px",
-                    right: "20px",
-                    zIndex: 10000,
-                    padding: "10px 16px",
-                    background: "#0d6efd",
-                    color: "white",
-                    borderRadius: 6
-                }}
-            >
-                🛒 Cart ({cart.length})
-            </button>
-
-
-        </div>
-    );
-
-
-
-    function renderProducts() {
-        return (
-            <ul>
-                {products.map(p => (
-                    <li key={p.id} style={{ marginBottom: 20 }}>
-                        <strong>{p.name}</strong> — Stock: {p.quantity}
-
-                        {/* USER: add-to-cart controls */}
-                        {user?.role === "USER" && (
-                            <>
-                                <select
-                                    style={{ marginLeft: 10 }}
-                                    value={selectedAmount[p.id] || 1}
-                                    onChange={(e) =>
-                                        setSelectedAmount({
-                                            ...selectedAmount,
-                                            [p.id]: Number(e.target.value),
-                                        })
-                                    }
-                                >
-                                    {[1, 2, 3, 4, 5].map(n => (
-                                        <option key={n} value={n}>
-                                            {n}
-                                        </option>
-                                    ))}
-                                </select>
-
-                                <button
-                                    style={{ marginLeft: 10 }}
-                                    onClick={() =>
-                                        addToCart({
-                                            id: p.id,
-                                            name: p.name,
-                                            quantity: selectedAmount[p.id] || 1,
-                                        })
-                                    }
-                                >
-                                    Add to Cart
-                                </button>
-                            </>
-                        )}
-
-                        {/* ADMIN controls */}
-                        {user?.role === "ADMIN" && (
-                            <div style={{ display: "inline-flex", gap: "5px", marginLeft: "20px" }}>
-                                <input
-                                    type="number"
-                                    min={1}
-                                    style={{ width: "60px" }}
-                                    value={adminAmount[p.id] || ""}
-                                    placeholder="Amt"
-                                    onChange={(e) =>
-                                        setAdminAmount({
-                                            ...adminAmount,
-                                            [p.id]: Number(e.target.value),
-                                        })
-                                    }
-                                />
-
-                                <button
-                                    style={{
-                                        background: "#0d6efd",
-                                        color: "white",
-                                        padding: "6px 10px",
-                                        borderRadius: 4
-                                    }}
-                                    onClick={() => modify(p.id, "increase", adminAmount[p.id] || 1)}
-                                >
-                                    + Increase
-                                </button>
-
-                                <button
-                                    style={{
-                                        background: "#0d6efd",
-                                        color: "white",
-                                        padding: "6px 10px",
-                                        borderRadius: 4
-                                    }}
-                                    onClick={() => modify(p.id, "decrease", adminAmount[p.id] || 1)}
-                                >
-                                    – Decrease
-                                </button>
-
-                                <button
-                                    style={{
-                                        background: "#dc3545",
-                                        color: "white",
-                                        padding: "6px 10px",
-                                        borderRadius: 4
-                                    }}
-                                    onClick={() => deleteProduct(p.id)}
-                                >
-                                    Delete
-                                </button>
-
-                            </div>
-                        )}
-
-                    </li>
-                ))}
-            </ul>
-        );
-    }
-
-
-    function renderCart() {
-        return (
-            <>
-                <h3>Your Cart</h3>
-
-                {cart.map(item => (
-                    <div key={item.id} style={{ marginBottom: 10 }}>
-                        <strong>{item.name}</strong>
-                        <div>Quantity: {item.quantity}</div>
-                        <button
-                            style={{ marginTop: 5 }}
-                            onClick={() => removeFromCart(item.id)}
-                        >
-                            Remove
-                        </button>
-                    </div>
-                ))}
-
-                <button
-                    style={{
-                        marginTop: 15,
-                        padding: "10px",
-                        width: "100%",
-                        background: "#4caf50",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                    }}
-                    onClick={buyCart}
-                >
-                    Buy All
-                </button>
-            </>
-        );
-    }
-
-
-    async function modify(id: number, type: "increase" | "decrease", amount: number) {
-        await fetch(`${BASE_URL}/api/inventory/${id}/${type}`, {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount }),
-        });
-
-        refreshProducts();
-    }
-
-
-    async function deleteProduct(id: number) {
-        await fetch(`${BASE_URL}/api/inventory/${id}`, {
-            method: "DELETE",
-            credentials: "include",
-        });
-
-        refreshProducts();
-    }
 
     function refreshProducts() {
         fetch(`${BASE_URL}/api/inventory`)
@@ -312,5 +53,140 @@ export default function ShopPage() {
             });
     }
 
+    // --- API and State Functions ---
+    async function buyCart() {
+        for (const item of cart) {
+            await fetch(`${BASE_URL}/api/inventory/${item.id}/decrease`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ amount: item.quantity }),
+            });
+        }
+        clearCart();
+        refreshProducts();
+    }
 
+    async function modify(id: number, type: "increase" | "decrease", amount: number) {
+        await fetch(`${BASE_URL}/api/inventory/${id}/${type}`, {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount }),
+        });
+        refreshProducts();
+    }
+
+    async function deleteProduct(id: number) {
+        await fetch(`${BASE_URL}/api/inventory/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+        });
+        refreshProducts();
+    }
+
+
+
+    return (
+        <div className="flex w-full min-h-screen">
+
+            {feedback && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '80px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10000,
+                    }}
+                    className={`p-4 rounded-lg shadow-xl text-white font-semibold ${feedback.type === 'success' ? 'bg-green-600' : 'bg-yellow-600'
+                        }`}
+                >
+                    {feedback.message}
+                </div>
+            )}
+
+            {/* LEFT: Product Grid Area */}
+            <div className="flex-grow p-6 max-w-7xl mx-auto">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-3xl font-bold">Shop Inventory</h2>
+
+                    {/* ADMIN ONLY BUTTON */}
+                    {user?.role === "ADMIN" && (
+                        <button
+                            className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                            onClick={() => setShowAddModal(true)}
+                        >
+                            ➕ Add Product
+                        </button>
+                    )}
+                </div>
+
+                {/* CARD GRID LAYOUT */}
+                <div className="product-card-grid">
+                    {products.map(p => (
+                        <ProductCard
+                            key={p.id}
+                            product={p}
+                            userRole={user?.role}
+
+                            flashType={cardFlash[p.id] || null}
+
+                            selectedAmount={selectedAmount[p.id] || 1}
+                            setSelectedAmount={(amount) =>
+                                setSelectedAmount(prev => ({ ...prev, [p.id]: amount }))
+                            }
+
+                            onAddToCart={() => {
+                                const MAX_LIMIT = 5;
+                                const itemInCart = cart.find(item => item.id === p.id);
+                                const currentQty = itemInCart ? itemInCart.quantity : 0;
+                                const amountToAdd = selectedAmount[p.id] || 1;
+
+                                if (currentQty + amountToAdd > MAX_LIMIT) {
+                                    showFeedback(`Maximum limit reached for ${p.name}. Limit is ${MAX_LIMIT} items total.`, 'warning');
+
+                                    setCardFlash(prev => ({ ...prev, [p.id]: 'warning' }));
+                                    clearCardFlash(p.id);
+                                    return;
+                                }
+
+                                addToCart({
+                                    id: p.id,
+                                    name: p.name,
+                                    quantity: amountToAdd,
+                                });
+                                showFeedback(`${amountToAdd}x ${p.name} added to cart.`);
+
+                                setCardFlash(prev => ({ ...prev, [p.id]: 'success' }));
+                                clearCardFlash(p.id); // Clear flash after timeout
+                            }}
+
+                            adminAmount={adminAmount[p.id] || 1}
+                            setAdminAmount={(amount) =>
+                                setAdminAmount(prev => ({ ...prev, [p.id]: amount }))
+                            }
+                            onModify={(id, type, amount) => {
+                                modify(id, type, amount);
+                                setCardFlash(prev => ({ ...prev, [id]: 'success' }));
+                                clearCardFlash(id);
+                            }}
+                            onDelete={(id) => {
+                                deleteProduct(id);
+                                setCardFlash(prev => ({ ...prev, [id]: 'warning' }));
+                                clearCardFlash(id);
+                            }}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {showAddModal && (
+                <AddProductModal
+                    onClose={() => setShowAddModal(false)}
+                    onSaved={refreshProducts}
+                />
+            )}
+        </div>
+    );
 }

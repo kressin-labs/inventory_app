@@ -1,0 +1,84 @@
+.product-card {
+    border: 1px solid #e5e7eb; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); 
+    overflow: hidden;
+    background-color: white; 
+    
+    transition: box-shadow 0.3s ease, background-color 0.3s ease; 
+}
+
+.product-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); 
+}
+
+
+.product-card.flash-success {
+    background-color: #d1e7dd; 
+    box-shadow: 0 0 10px rgba(0, 150, 0, 0.5); 
+}
+
+.product-card.flash-warning {
+    background-color: #fff3cd;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.8); 
+}
+
+
+.image-placeholder {
+    height: 192px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.available-bg {
+    background-color: #f3f4f6; 
+}
+
+.out-of-stock-bg {
+    background-color: #fee2e2; 
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.5rem; 
+    font-weight: 700; 
+    margin-bottom: 8px;
+}
+
+.card-stock-status {
+    margin-bottom: 1rem;
+    font-weight: 600; 
+}
+
+.user-controls-container, .admin-controls-container, .admin-button-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.select-quantity {
+    width: 33%;
+}
+
+.admin-button-group {
+    justify-content: space-between;
+    width: 100%;
+}
+
+.admin-button-increase, .admin-button-decrease {
+    width: 50%; 
+}
+
+.admin-button-delete {
+    margin-top: 8px;
+    background: #dc3545;
+}
+
+.user-controls-container button, .admin-controls-container button {
+    padding: 8px 10px;
+}

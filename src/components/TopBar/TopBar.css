@@ -1,21 +1,114 @@
 .topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #222;
-  padding: 10px 20px;
-  color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #222;
+    padding: 10px 20px;
+    color: white;
 }
 
+.topbar-center {
+    flex-grow: 1; 
+    text-align: center;
+}
+
+.topbar-left, .topbar-right {
+    flex-shrink: 0;
+    min-width: 150px;
+}
+
+.topbar-left a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.topbar-left {
+    text-align: left; 
+}
+
+.topbar-right { 
+    text-align: right; 
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
+.right { 
+    display: flex;
+    align-items: center;
+    gap: 16px; 
+}
+
+
 .username {
-  margin-right: 20px;
+    margin-right: 0; 
+}
+
+.cart-btn {
+    padding: 6px 12px;
+    font-weight: 600;
 }
 
 .logout-btn {
-  background: #e74c3c;
-  border: none;
-  padding: 6px 12px;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
+    background: #e74c3c;
+    border: none;
+    padding: 6px 12px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.cart-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.cart-item-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fafafa;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.item-name {
+    font-size: 1.1rem;
+    color: #1a1a1a;
+}
+
+.item-qty {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.remove-btn {
+    background: none;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+    background: #dc3545;
+    color: white;
 }
