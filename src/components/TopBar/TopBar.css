@@ -1,3 +1,17 @@
+.topbar-container {
+    width: 100%;
+}
+
+.development-banner {
+    background-color: #ffc107;
+    color: #343a40;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    width: 100%;
+}
+
 .topbar {
     display: flex;
     justify-content: space-between;

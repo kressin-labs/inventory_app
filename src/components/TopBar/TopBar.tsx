@@ -85,49 +85,59 @@ export default function TopBar({ onProductsBought, onOpenLogin }: TopBarProps) {
     }
 
     return (
-        <div className="topbar">
+        <div className="topbar-container">
             
-            {/* LEFT CONTAINER */}
-            <div className="topbar-left">
-                <a href="https://fabiankressin.com" className="topbar-link">
-                    fabiankressin.com
-                </a>
-            </div>
-
-            {/* CENTER CONTAINER */}
-            <div className="topbar-center">
-                <div className="title">Inventory App</div>
-            </div>
-
-            {/* RIGHT CONTAINER */}
-            <div className="topbar-right right">
+            {/* Main Navigation Bar (Three-column layout) */}
+            <div className="topbar">
                 
-                <button
-                    onClick={() => setCartOpen(true)}
-                    className="cart-btn"
-                >
-                    🛒 Cart ({totalItemCount})
-                </button>
+                {/* LEFT CONTAINER: Website Link */}
+                <div className="topbar-left">
+                    <a href="https://fabiankressin.com" className="topbar-link">
+                        fabiankressin.com
+                    </a>
+                </div>
 
-                {/* AUTH CONTROLS */}
-                {user ? (
-                    <>
-                        <span className="username">{user.username} ({user.role})</span>
-                        <button className="logout-btn" onClick={logout}>Logout</button>
-                    </>
-                ) : (
-                    /* LOGIN BUTTON */
-                    <button className="login-btn" onClick={onOpenLogin}>
-                        Login
+                {/* CENTER CONTAINER: App Title */}
+                <div className="topbar-center">
+                    <div className="title">Inventory App</div>
+                </div>
+
+                {/* RIGHT CONTAINER: Cart Button and User Controls */}
+                <div className="topbar-right right">
+                    
+                    <button
+                        onClick={() => setCartOpen(true)}
+                        className="cart-btn"
+                    >
+                        🛒 Cart ({totalItemCount})
                     </button>
-                )}
-                
-            </div>
 
-            {/* CART MODAL */}
-            <CartModal open={cartOpen} onClose={() => setCartOpen(false)}>
-                {renderCart()}
-            </CartModal>
+                    {/* AUTH CONTROLS */}
+                    {user ? (
+                        <>
+                            <span className="username">{user.username} ({user.role})</span>
+                            <button className="logout-btn" onClick={logout}>Logout</button>
+                        </>
+                    ) : (
+                        /* LOGIN BUTTON */
+                        <button className="login-btn" onClick={onOpenLogin}>
+                            Login
+                        </button>
+                    )}
+                    
+                </div>
+
+                {/* CART MODAL */}
+                <CartModal open={cartOpen} onClose={() => setCartOpen(false)}>
+                    {renderCart()}
+                </CartModal>
+            </div>
+            
+            {/* DEVELOPMENT BANNER */}
+            <div className="development-banner">
+                ⚠️ This application is <strong>In Development</strong>. Data may reset.
+            </div>
+            
         </div>
     );
 }
