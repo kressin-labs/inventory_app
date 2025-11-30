@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from "react";
 import ShopPage from "./pages/ShopPage/ShopPage";
-import LoginPage from "./pages/LoginPage/LoginPage";
 import TopBar from "./components/TopBar/TopBar";
-import LoginModal from "./components/LoginModal/LoginModal"; // 🚨 REQUIRED
+import LoginModal from "./components/LoginModal/LoginModal";
 import { useAuth } from "./context/AuthContext";
 import './App.css'
 
