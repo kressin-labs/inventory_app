@@ -8,7 +8,7 @@ const CANVAS_SIZE = GRID_SIZE * PIXEL_SIZE;
 interface PixelEditorModalProps {
     open: boolean;
     onClose: () => void;
-    onSave: (base64Image: string) => void;
+    onSave: (imageBase64: string) => void;
 }
 
 // Helper to initialize a blank white grid
@@ -115,8 +115,8 @@ const PixelEditorModal: React.FC<PixelEditorModalProps> = ({ open, onClose, onSa
         if (!canvas) return;
 
         // Export canvas content as Base64 encoded PNG string
-        const base64Image = canvas.toDataURL('image/png');
-        onSave(base64Image); 
+        const imageBase64 = canvas.toDataURL('image/png');
+        onSave(imageBase64); 
         onClose();
     };
     

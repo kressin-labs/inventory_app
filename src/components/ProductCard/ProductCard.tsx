@@ -5,6 +5,7 @@ type Product = {
     id: number;
     name: string;
     quantity: number;
+    imageBase64: string;
 };
 type ModifyType = "increase" | "decrease";
 
@@ -59,7 +60,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className={`product-card ${flashClass}`}>
 
             <div className={`image-placeholder ${isOutOfStock ? 'out-of-stock-bg' : 'available-bg'}`}>
-                <span className="image-placeholder-text">Image Placeholder</span>
+                {product.imageBase64 ? (
+                    <img src={product.imageBase64} alt={product.name} className="product-image" />
+                ) : (
+                    <span className="text-gray-500 text-sm">No Custom Image</span>
+                )}
             </div>
 
             <div className="card-content">
