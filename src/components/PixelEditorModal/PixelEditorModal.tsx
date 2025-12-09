@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './PixelEditorModal.css'
 
-const GRID_SIZE = 16;
-const PIXEL_SIZE = 20;
+const GRID_SIZE = 64;
+const PIXEL_SIZE = 5;
 const CANVAS_SIZE = GRID_SIZE * PIXEL_SIZE;
 
 interface PixelEditorModalProps {
