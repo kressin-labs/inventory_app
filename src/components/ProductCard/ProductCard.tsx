@@ -1,12 +1,9 @@
 import React from 'react';
 import './ProductCard.css';
+import type { Product } from '../../types/product.d.ts';
 
-type Product = {
-    id: number;
-    name: string;
-    quantity: number;
-    imageBase64: string;
-};
+
+
 type ModifyType = "increase" | "decrease";
 
 interface ProductCardProps {

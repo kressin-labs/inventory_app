@@ -3,14 +3,11 @@ import { useAuth } from "../../context/AuthContext";
 import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import { useCart } from "../../context/CartContext";
 import ProductCard from '../../components/ProductCard/ProductCard';
+import type { Product } from '../../types/product.d.ts';
 
 import './ShopPage.css'
 
-type Product = {
-    id: number;
-    name: string;
-    quantity: number;
-};
+
 
 export default function ShopPage() {
     const { user } = useAuth();
