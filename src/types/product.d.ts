@@ -3,6 +3,7 @@ export interface ProductResponse {
     name: string;
     quantity: number;
     imageBase64: string | null; 
+    info: string;
 }
 
 export type Product = {
@@ -10,4 +11,5 @@ export type Product = {
     name: string;
     quantity: number;
     imageBase64: string;
+    info: string;
 };

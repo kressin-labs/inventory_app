@@ -67,6 +67,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="card-content">
                 <h3 className="card-title">{product.name}</h3>
 
+                {product.info && <p className="product-info">{product.info}</p>}
+
                 <p className={`card-stock-status ${isOutOfStock ? 'stock-low' : 'stock-high'}`}>
                     Stock: {isOutOfStock ? 'Out of Stock' : product.quantity}
                 </p>

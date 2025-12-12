@@ -12,6 +12,7 @@ type AddProductModalProps = {
 export default function AddProductModal({ onClose, onSaved }: AddProductModalProps) {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState<number>(0);
+  const [info, setInfo] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [productImageBase64, setProductImageBase64] = useState<string | null>(null);
 
@@ -28,7 +29,8 @@ export default function AddProductModal({ onClose, onSaved }: AddProductModalPro
     const productData = {
       name,
       quantity,
-      imageBase64: productImageBase64
+      imageBase64: productImageBase64,
+      info: info
     };
 
     await fetch(`${BASE_URL}/api/inventory`, {
@@ -66,6 +68,15 @@ export default function AddProductModal({ onClose, onSaved }: AddProductModalPro
             value={quantity}
             onChange={(e) => setQuantity(Number(e.target.value))}
             required
+          />
+
+          <label htmlFor="product-info">Product Info</label>
+          <textarea
+            id="product-info"
+            placeholder="Short description or info text"
+            value={info}
+            onChange={(e) => setInfo(e.target.value)}
+            rows={3}
           />
 
           <div className="image-section">
