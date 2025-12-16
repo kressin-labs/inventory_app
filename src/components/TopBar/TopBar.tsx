@@ -36,6 +36,57 @@ const CartItemCard: React.FC<CartItemCardProps> = ({ item, onRemove }) => (
     </div>
 );
 
+interface Language {
+    code: string;
+    icon: string;
+    name: string;
+}
+
+const LANGUAGES: Language[] = [
+    { code: 'EN', icon: '🇺🇸', name: 'English' },
+    { code: 'DE', icon: '🇩🇪', name: 'Deutsch' },
+    { code: 'ES', icon: '🇪🇸', name: 'Español' },
+];
+
+const LanguageSelector: React.FC = () => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [selectedLang, setSelectedLang] = useState<Language>(LANGUAGES[0]);
+
+    const handleSelect = (lang: Language) => {
+        setSelectedLang(lang);
+        setIsDropdownOpen(false);
+        console.log(`Language changed to: ${lang.name}`);
+    };
+
+    return (
+        <div className="language-selector">
+            <button 
+                className="lang-button" 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+                <span className="lang-icon">{selectedLang.icon}</span>
+                <span className="lang-code">{selectedLang.code}</span>
+                <span className="dropdown-arrow">{isDropdownOpen ? '▲' : '▼'}</span>
+            </button>
+            
+            {isDropdownOpen && (
+                <div className="lang-dropdown">
+                    {LANGUAGES.map(lang => (
+                        <div
+                            key={lang.code}
+                            className="lang-option"
+                            onClick={() => handleSelect(lang)}
+                        >
+                            <span className="lang-icon">{lang.icon}</span>
+                            <span className="lang-name">{lang.name}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
 
 export default function TopBar({ onProductsBought, onOpenLogin }: TopBarProps) {
     const { user, logout } = useAuth();
@@ -104,6 +155,8 @@ export default function TopBar({ onProductsBought, onOpenLogin }: TopBarProps) {
 
                 {/* RIGHT CONTAINER: Cart Button and User Controls */}
                 <div className="topbar-right right">
+                    
+                    <LanguageSelector />
                     
                     <button
                         onClick={() => setCartOpen(true)}
