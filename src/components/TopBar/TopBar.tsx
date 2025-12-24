@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { CartModal } from "../../components/CartModal/CartModal";
+import { useLanguage } from "../../context/LanguageContext";
 import "./TopBar.css";
+
+
 
 type CartItem = {
     id: number;
@@ -42,28 +45,20 @@ interface Language {
     name: string;
 }
 
-const LANGUAGES: Language[] = [
+const LANGUAGES = [
     { code: 'EN', icon: '🇺🇸', name: 'English' },
     { code: 'DE', icon: '🇩🇪', name: 'Deutsch' },
-    { code: 'ES', icon: '🇪🇸', name: 'Español' },
 ];
 
 const LanguageSelector: React.FC = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedLang, setSelectedLang] = useState<Language>(LANGUAGES[0]);
+    const { locale, setLocale } = useLanguage();
 
-    const handleSelect = (lang: Language) => {
-        setSelectedLang(lang);
-        setIsDropdownOpen(false);
-        console.log(`Language changed to: ${lang.name}`);
-    };
+    const selectedLang = LANGUAGES.find(l => l.code === locale) || LANGUAGES[0];
 
     return (
         <div className="language-selector">
-            <button 
-                className="lang-button" 
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
+            <button className="lang-button" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                 <span className="lang-icon">{selectedLang.icon}</span>
                 <span className="lang-code">{selectedLang.code}</span>
                 <span className="dropdown-arrow">{isDropdownOpen ? '▲' : '▼'}</span>
@@ -72,11 +67,7 @@ const LanguageSelector: React.FC = () => {
             {isDropdownOpen && (
                 <div className="lang-dropdown">
                     {LANGUAGES.map(lang => (
-                        <div
-                            key={lang.code}
-                            className="lang-option"
-                            onClick={() => handleSelect(lang)}
-                        >
+                        <div key={lang.code} className="lang-option" onClick={() => { setLocale(lang.code); setIsDropdownOpen(false); }}>
                             <span className="lang-icon">{lang.icon}</span>
                             <span className="lang-name">{lang.name}</span>
                         </div>
@@ -91,6 +82,8 @@ const LanguageSelector: React.FC = () => {
 export default function TopBar({ onProductsBought, onOpenLogin }: TopBarProps) {
     const { user, logout } = useAuth();
     const { cart, removeFromCart, clearCart } = useCart();
+    const { t } = useLanguage("mainPage")
+
     const [cartOpen, setCartOpen] = useState(false);
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -150,7 +143,7 @@ export default function TopBar({ onProductsBought, onOpenLogin }: TopBarProps) {
 
                 {/* CENTER CONTAINER: App Title */}
                 <div className="topbar-center">
-                    <div className="title">Inventory App</div>
+                    <div className="title">{t("inventoryApp")}</div>
                 </div>
 
                 {/* RIGHT CONTAINER: Cart Button and User Controls */}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { login, getCurrentUser } from "../../api/authApi";
 import { useAuth } from "../../context/AuthContext";
+import { useLanguage } from "../../context/LanguageContext";
 import './LoginPage.css'
 
 interface LoginPageProps {
@@ -9,6 +10,8 @@ interface LoginPageProps {
 
 export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
     const { setUser } = useAuth();
+    // const { t } = useLanguage();
+    const { t } = useLanguage("loginModal")
 
 
     const [username, setUsername] = useState("user");
@@ -50,7 +53,7 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
 
             {error && <div className="login-error-message">{error}</div>}
 
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">{t("username")}</label>
             <input
                 id="username"
                 value={username}
@@ -59,7 +62,7 @@ export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
                 required
             />
 
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t("password")}</label>
             <input
                 id="password"
                 type="password"

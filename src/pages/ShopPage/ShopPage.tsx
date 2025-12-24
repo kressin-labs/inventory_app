@@ -4,6 +4,7 @@ import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import { useCart } from "../../context/CartContext";
 import ProductCard from '../../components/ProductCard/ProductCard';
 import type { Product } from '../../types/product.d.ts';
+import { useLanguage } from "../../context/LanguageContext";
 
 import './ShopPage.css'
 
@@ -11,6 +12,8 @@ import './ShopPage.css'
 
 export default function ShopPage() {
     const { user } = useAuth();
+    const { t } = useLanguage("mainPage")
+
     const [products, setProducts] = useState<Product[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [selectedAmount, setSelectedAmount] = useState<Record<number, number>>({});
@@ -106,7 +109,7 @@ export default function ShopPage() {
             {/* LEFT: Product Grid Area */}
             <div className="flex-grow p-6 max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl font-bold">Shop Inventory</h2>
+                    <h2 className="text-3xl font-bold">{t("shopInventory")}</h2>
 
                     {/* ADMIN ONLY BUTTON */}
                     {user?.role === "ADMIN" && (

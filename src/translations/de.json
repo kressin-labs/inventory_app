@@ -2,5 +2,9 @@
     "loginModal": {
         "username": "Benutzername",
         "password": "Passwort"
+    },
+    "mainPage":{
+        "inventoryApp": "Inventar App",
+        "shopInventory": "Shop Inventar"
     }
 }
