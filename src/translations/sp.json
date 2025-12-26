@@ -1,0 +1,10 @@
+{
+    "loginModal": {
+        "username": "Nombre de usuario",
+        "password": "Contraseña"
+    },
+    "mainPage": {
+        "inventoryApp": "Aplicación de inventario",
+        "shopInventory": "Inventario de la tienda"
+    }
+}
