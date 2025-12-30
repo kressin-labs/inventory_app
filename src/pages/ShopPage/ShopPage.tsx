@@ -4,7 +4,7 @@ import AddProductModal from "../../components/AddProductModal/AddProductModal";
 import { useCart } from "../../context/CartContext";
 import ProductCard from '../../components/ProductCard/ProductCard';
 import type { Product } from '../../types/product.d.ts';
-import { useLanguage } from "../../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 import './ShopPage.css'
 
@@ -12,7 +12,7 @@ import './ShopPage.css'
 
 export default function ShopPage() {
     const { user } = useAuth();
-    const { t } = useLanguage("mainPage")
+    const { t } = useTranslation('translation', { keyPrefix: 'mainPage' });
 
     const [products, setProducts] = useState<Product[]>([]);
     const [showAddModal, setShowAddModal] = useState(false);

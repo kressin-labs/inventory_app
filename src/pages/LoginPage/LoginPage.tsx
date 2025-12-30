@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { login, getCurrentUser } from "../../api/authApi";
 import { useAuth } from "../../context/AuthContext";
-import { useLanguage } from "../../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 import './LoginPage.css'
 
 interface LoginPageProps {
@@ -11,7 +11,7 @@ interface LoginPageProps {
 export default function LoginPage({ onLoginSuccess }: LoginPageProps) {
     const { setUser } = useAuth();
     // const { t } = useLanguage();
-    const { t } = useLanguage("loginModal")
+    const { t } = useTranslation('translation', { keyPrefix: 'loginModal' });
 
 
     const [username, setUsername] = useState("user");
